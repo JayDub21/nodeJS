@@ -7,6 +7,8 @@ const logger = require('./logger');
 const express = require('express');
 const app = express();
 
+app.set('view engine', 'pug');
+
 app.use(express.json());
 // Direct Link to file in public folder - http://localhost:5000/readme.txt
 app.use(express.static('public'));
@@ -14,9 +16,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
 
 // Configuration
-// console.log('Application Name: ' + config.get('name'));
-// console.log('Mail Name: ' + config.get('mail.host'));
-// console.log('Mail Password: ' + config.get('mail.password'));
+console.log('Application Name: ' + config.get('name'));
+console.log('Mail Name: ' + config.get('mail.host'));
+console.log('Mail Password: ' + config.get('mail.password'));
 
 if (app.get('env') === 'development') {
   app.use(morgan('tiny'));
@@ -32,7 +34,7 @@ const courses = [
 ];
 
 app.get('/', (req, res) => {
-  res.send('Hello World!!');
+  res.render('index', { title: 'My App', message: 'Hello' });
 });
 
 app.get('/api/courses', (req, res) => {
