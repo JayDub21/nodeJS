@@ -3,9 +3,9 @@ const config = require('config');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const Joi = require('joi');
-const logger = require('./logger');
-const courses = require('../express-basic/routes/courses');
-const home = require('../express-basic/routes/home');
+const logger = require('./routes/middleware/logger');
+const home = require('./routes/home');
+const courses = require('./routes/courses');
 const express = require('express');
 const app = express();
 
