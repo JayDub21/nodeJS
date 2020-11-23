@@ -12,6 +12,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(morgan('tiny'));
 
+if (app.get('env') === 'development') {
+  app.use(morgan('tiny'));
+  console.log('Morgan enabled...');
+}
 app.use(logger);
 
 const courses = [
