@@ -31,8 +31,17 @@ async function getCourses() {
 
     const courses = await Course
     //Put find() before .or([]) & .and([])
-    .find()
-    .or([ {author: 'Mosh'}, { isPublished: true }])
+    // .find()
+    // .or([ {author: 'Mosh'}, { isPublished: true }])
+    
+    // Starts with Mosh
+    .find({ author: /^Mosh/ })
+
+    // End with Hamedani (The i ending removes case sensitivity)
+    .find({ author: /Hamedani$/i})
+
+    // Contains Mosh
+    .find({ author: /.*Mosh.*/})
 
     // .find({author: 'Mosth', isPublished: true})
     .limit(10)
