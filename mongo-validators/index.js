@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/demo')
+mongoose.connect('mongodb://localhost/demo', { useNewUrlParser: true})
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('Could not connect to MongoDB...', err))
 
@@ -46,26 +46,26 @@ const Course = mongoose.model('Course', courseSchema);
 async function createCourse() {
     const course = new Course({
         name: 'Angular Course',
-        category: 'web',
+        category: '-',
         author: 'Mosh', 
         tags: null,
         isPublished: true,
         price: 15
     });
+
     // Try / Catch to validate if name exists
     try{
-
         const result = await course.save();
         console.log(result);
     }
     catch (ex) {
-        console.log(ex.message);
-    }
-    
+        // field allows any error to display in console (name, tags, category, etc..)
+        for (field in ex.errors) 
+        console.log(ex.errors[field].message);
+    }  
 }
 
 async function getCourses() {
-
 
     const courses = await Course
     .find({author: 'Mosth', isPublished: true})
