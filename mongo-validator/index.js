@@ -5,11 +5,27 @@ mongoose.connect('mongodb://localhost/demo')
     .catch(err => console.error('Could not connect to MongoDB...', err))
 
 const courseSchema = new mongoose.Schema({
-    name: String,
+    // Require name
+    name: {
+        type: String, 
+        required: true,
+        minlength: 5,
+        maxlength: 255
+    },
+    category: {
+        type: String,
+        requred: true,
+        enum: ['web', 'mobile', 'network'],
+        },
     author: String,
     tags: [ String ],
     date: { type: Date, default: Date.now },
-    isPublished: Boolean
+    isPublished: Boolean,
+    price: {
+        type: Number,
+        // Cannot use arrow funtion
+        required: function () { return this.isPublished; }
+    }
 });
 
 const Course = mongoose.model('Course', courseSchema);
@@ -17,13 +33,22 @@ const Course = mongoose.model('Course', courseSchema);
 async function createCourse() {
     const course = new Course({
         name: 'Angular Course',
+        category: '-',
         author: 'Mosh', 
         tags: ['angular', 'frontend'],
-        isPublished: true
+        isPublished: true,
+        price: 15
     });
+    // Try / Catch to validate if name exists
+    try{
+
+        const result = await course.save();
+        console.log(result);
+    }
+    catch (ex) {
+        console.log(ex.message);
+    }
     
-    const result = await course.save();
-    console.log(result);
 }
 
 async function getCourses() {
@@ -50,6 +75,6 @@ async function updateCourse(id) {
     console.log(result);
 }
 
-updateCourse('5fbd4f2965caad1196996e40');
-// createCourse();
-getCourses();
+// updateCourse('5fbd4f2965caad1196996e40');
+createCourse();
+// getCourses();
